@@ -2,8 +2,6 @@
 {
     private static void Main(string[] args)
     {
-
-
         bool Exit = false;
         var pos = new Pos();
 
@@ -23,7 +21,6 @@
                     case "2":
                         Console.Clear();
                         pos.PrintTransactions();
-
                         break;
                     case "3":
                         Console.Clear();
@@ -38,7 +35,6 @@
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-
             }
             Console.ReadKey();
             Console.Clear();

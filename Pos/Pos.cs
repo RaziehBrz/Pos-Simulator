@@ -8,7 +8,6 @@ class Pos : Ipos
     public string _cardFilePath = @"C:\\Users\\FAHA\\Desktop\\Pos-Simulator\\Code Maker\\Card.txt";
     public string _passwordFilePath = @"C:\\Users\\FAHA\\Desktop\\Pos-Simulator\\Code Maker\\Password.txt";
     public string _transactionFilePath = @"C:\\Users\\FAHA\\Desktop\\Pos-Simulator\\Pos\\Transaction.txt";
-
     public void GetData()
     {
         Console.WriteLine("Enter the purchase amount :");
@@ -25,7 +24,6 @@ class Pos : Ipos
 
         Console.WriteLine("Enter the dynamic password :");
         _password = Console.ReadLine();
-
     }
     public void Validation()
     {
