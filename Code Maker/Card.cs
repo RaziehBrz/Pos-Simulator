@@ -3,7 +3,7 @@ public class Card : ICard
     public string CardNumber { get; set; }
     public string Cvv2 { get; set; }
     public string ExpirationDate { get; set; }
-    private string _cardInfoPath = @"Enter your card.txt file path.";
+    private string _cardInfoPath = @"C:\Users\FAHA\Desktop\Pos-Simulator\Code Maker\Card.txt";
     public void GetCardInfo()
     {
         Console.WriteLine("Enter the card number : ");
@@ -96,7 +96,7 @@ public class Card : ICard
         Console.WriteLine("\nEnter a Card number to remove:");
         var inputNumber = Console.ReadLine();
 
-        for (int i = 0; i < lines.Length; i++)
+        for (int i = 0; i < myList.Count; i++)
         {
             if (lines[i] == inputNumber)
             {
@@ -148,21 +148,19 @@ public class Card : ICard
     }
     public bool CardInfoValidation(string cardNumber, string cvv2, string exDate)
     {
-        var cardNumberValidationList = cardNumber.Where(x => char.IsDigit(x));
-        var cvv2ValidationList = cvv2.Where(x => char.IsDigit(x));
         var checkExDate = true;
-
         if (exDate.Length != 5
         || exDate[2] != '/'
-        || !(char.IsDigit(exDate[0]))
-        || !(char.IsDigit(exDate[1]))
-        || !(char.IsDigit(exDate[3]))
-        || !(char.IsDigit(exDate[4])))
+        || !Char.IsDigit(exDate[0])
+        || !Char.IsDigit(exDate[1])
+        || !Char.IsDigit(exDate[3])
+        || !Char.IsDigit(exDate[4]))
+        {
             checkExDate = false;
-        if (cardNumber.Length != 16 || cardNumberValidationList.Count() != 16) Console.WriteLine("Card number must be 16 digits!");
-        else if (cvv2.Length != 4 || cvv2ValidationList.Count() != 4) Console.WriteLine("Cvv2 must be 4 digits!");
-        else if (!checkExDate)
-            Console.WriteLine("The expiration date must be in this format : year/month");
+        }
+        if (cardNumber.Length != 16 || !cardNumber.All(x => Char.IsDigit(x))) Console.WriteLine("Card number must be 16 digits!");
+        else if (cvv2.Length != 4 || !cvv2.All(x => Char.IsDigit(x))) Console.WriteLine("Cvv2 must be 4 digits!");
+        else if (!checkExDate) Console.WriteLine("The expiration date must be in this format : year/month");
         else
         {
             return true;
