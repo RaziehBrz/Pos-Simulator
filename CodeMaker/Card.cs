@@ -1,6 +1,6 @@
 public class Card : ICard
 {
-    private const string _cardInfoPath = @"Enter the path of the card information file";
+    private const string _cardInfoPath = @"C:\Users\FAHA\Desktop\Pos-Simulator\CodeMaker\Card.txt";
     private const int _cardNumber_Length = 16;
     private const int _cvv2_Length = 4;
     private const int _expireDate_Length = 5;
@@ -22,7 +22,7 @@ public class Card : ICard
     public void AddCard()
     {
         GetCardInfo();
-        var validInfo = CardInfoValidation(CardNumber, Cvv2, ExpireDate);
+        var validInfo = ValidateCardInfo(CardNumber, Cvv2, ExpireDate);
         if (validInfo)
         {
             MyFile.WriteInfo(_cardInfoPath, CardNumber, Cvv2, ExpireDate);
@@ -42,6 +42,7 @@ public class Card : ICard
             if (lines.Contains(inputCardNumber))
             {
                 Console.Clear();
+
                 Console.WriteLine($"Card number : {lines[i]}");
                 Console.WriteLine($"Cvv2 : {lines[i + 1]}");
                 Console.WriteLine($"Expiration date : {lines[i + 2]}");
@@ -72,7 +73,7 @@ public class Card : ICard
                     default:
                         throw new Exception("You entered wrong item.");
                 }
-                var validInfo = CardInfoValidation(lines[i], lines[i + 1], lines[i + 2]);
+                var validInfo = ValidateCardInfo(lines[i], lines[i + 1], lines[i + 2]);
                 if (validInfo)
                 {
                     File.WriteAllLines(_cardInfoPath, lines);
@@ -86,34 +87,26 @@ public class Card : ICard
     }
     public void RemoveCard()
     {
-        var lines = MyFile.ReadInfo(_cardInfoPath);
+        var lines = MyFile.ReadInfo(_cardInfoPath).ToList();
 
         showCardNumbersList();
-        var myList = lines.ToList();
 
         Console.WriteLine("\nEnter a Card number to remove:");
         var inputNumber = Console.ReadLine();
 
-        for (int i = 0; i < myList.Count; i++)
+        if (!lines.Any(x => x == inputNumber))
         {
-            if (lines[i] == inputNumber)
-            {
-                myList.Remove(lines[i]);
-                myList.Remove(lines[i + 1]);
-                myList.Remove(lines[i + 2]);
-                myList.Remove(lines[i + 3]);
-            }
-            else if (lines[i] != inputNumber && i == lines.Length - 1)
-            {
-                throw new Exception("Input card number does not exist!");
-            }
-            else if (inputNumber.Length == 0)
-            {
-                throw new Exception("You did not enter a card number!");
-            }
+            throw new Exception("Input card number does not exist!");
         }
-        File.WriteAllLines(_cardInfoPath, myList);
+        else
+        {
+            int i = lines.IndexOf(inputNumber);
+            lines.RemoveRange(i, 4);
+            File.WriteAllLines(_cardInfoPath, lines);
+            Console.WriteLine("Card removed successfully");
+        }
     }
+
     public void ShowCardsList()
     {
         var lines = MyFile.ReadInfo(_cardInfoPath);
@@ -144,25 +137,32 @@ public class Card : ICard
             j++;
         }
     }
-    public bool CardInfoValidation(string cardNumber, string cvv2, string exDate)
+    public bool ValidateCardInfo(string cardNumber, string cvv2, string exDate)
     {
-        var checkExDate = true;
-        if (exDate.Length != _expireDate_Length
-        || exDate[2] != _expireDate_Separator
-        || !Char.IsDigit(exDate[0])
-        || !Char.IsDigit(exDate[1])
-        || !Char.IsDigit(exDate[3])
-        || !Char.IsDigit(exDate[4]))
+        if (cardNumber.Length != _cardNumber_Length || !cardNumber.All(Char.IsDigit))
         {
-            checkExDate = false;
+            Console.WriteLine("Card number must be 16 digits!");
+            return false;
         }
-        if (cardNumber.Length != _cardNumber_Length || !cardNumber.All(x => Char.IsDigit(x))) Console.WriteLine("Card number must be 16 digits!");
-        else if (cvv2.Length != _cvv2_Length || !cvv2.All(x => Char.IsDigit(x))) Console.WriteLine("Cvv2 must be 4 digits!");
-        else if (!checkExDate) Console.WriteLine("The expiration date must be in this format : year/month");
-        else
+
+        if (cvv2.Length != _cvv2_Length || !cvv2.All(Char.IsDigit))
         {
-            return true;
+            Console.WriteLine("CVV2 must be 4 digits!");
+            return false;
         }
-        return false;
+
+        if (!ValidateExpirationDate(exDate))
+        {
+            Console.WriteLine("The expiration date must be in the format: MM/YY");
+            return false;
+        }
+        return true;
+    }
+
+    public bool ValidateExpirationDate(string exDate)
+    {
+        return (exDate.Split('/')[0].All(x => Char.IsDigit(x))
+        && exDate.Split('/')[1].All(x => Char.IsDigit(x))
+        && exDate[2] == _expireDate_Separator);
     }
 }

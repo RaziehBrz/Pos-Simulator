@@ -9,5 +9,5 @@ interface ICard
     void ShowCardsList();
     void showCardNumbersList();
     void GetCardInfo();
-    bool CardInfoValidation(string cardNumber, string cvv2, string exDate);
+    bool ValidateCardInfo(string cardNumber, string cvv2, string exDate);
 }
