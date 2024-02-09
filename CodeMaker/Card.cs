@@ -1,6 +1,6 @@
 public class Card : ICard
 {
-    private const string _cardInfoPath = @"C:\Users\FAHA\Desktop\Pos-Simulator\CodeMaker\Card.txt";
+    private const string _cardInfoPath = @"Enter the path of your card information file";
     private const int _cardNumber_Length = 16;
     private const int _cvv2_Length = 4;
     private const int _expireDate_Length = 5;
