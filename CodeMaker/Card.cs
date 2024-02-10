@@ -1,6 +1,7 @@
 public class Card : ICard
 {
-    private const string _cardInfoPath = @"Enter the path of your card information file";
+    //Enter the path of your card information file
+    private const string _cardInfoPath = @"C:\Users\FAHA\Desktop\Pos-Simulator\CodeMaker\Card.txt";
     private const int _cardNumber_Length = 16;
     private const int _cvv2_Length = 4;
     private const int _expireDate_Length = 5;
@@ -32,7 +33,7 @@ public class Card : ICard
     public void EditCard()
     {
         var lines = MyFile.ReadInfo(_cardInfoPath);
-        showCardNumbersList();
+        ShowCardNumbersList();
 
         Console.WriteLine("\nEnter a Card number to upadte:");
         var inputCardNumber = Console.ReadLine();
@@ -42,14 +43,7 @@ public class Card : ICard
             if (lines.Contains(inputCardNumber))
             {
                 Console.Clear();
-
-                Console.WriteLine($"Card number : {lines[i]}");
-                Console.WriteLine($"Cvv2 : {lines[i + 1]}");
-                Console.WriteLine($"Expiration date : {lines[i + 2]}");
-                Console.WriteLine("\nEnter an item to edit:");
-                Console.WriteLine("\t1)Card number");
-                Console.WriteLine("\t2)Cvv2");
-                Console.WriteLine("\t3)Expire date");
+                PrintEditCardMenu(lines, i);
 
                 var selectedNum = Console.ReadLine();
 
@@ -89,7 +83,7 @@ public class Card : ICard
     {
         var lines = MyFile.ReadInfo(_cardInfoPath).ToList();
 
-        showCardNumbersList();
+        ShowCardNumbersList();
 
         Console.WriteLine("\nEnter a Card number to remove:");
         var inputNumber = Console.ReadLine();
@@ -111,30 +105,39 @@ public class Card : ICard
     {
         var lines = MyFile.ReadInfo(_cardInfoPath);
         int i = 0;
-        foreach (var line in lines)
+
+        if (lines.Length == 0) Console.WriteLine("There are no cards to display!");
+        else
         {
-            if (line.Length == _cardNumber_Length)
+            foreach (var line in lines)
             {
-                Console.WriteLine($"Card {i + 1}");
-                i++;
+                if (line.Length == _cardNumber_Length)
+                {
+                    Console.WriteLine($"Card {i + 1}");
+                    i++;
+                }
+                if (line.Length == _cardNumber_Length) Console.Write("Card number : ");
+                else if (line.Length == _cvv2_Length) Console.Write("Cvv2 : ");
+                else if (line.Length == _expireDate_Length) Console.Write("Expiration Date : ");
+                Console.WriteLine(line);
             }
-            if (line.Length == _cardNumber_Length) Console.Write("Card number : ");
-            else if (line.Length == _cvv2_Length) Console.Write("Cvv2 : ");
-            else if (line.Length == _expireDate_Length) Console.Write("Expiration Date : ");
-            Console.WriteLine(line);
         }
     }
-    public void showCardNumbersList()
+    public void ShowCardNumbersList()
     {
         var lines = MyFile.ReadInfo(_cardInfoPath);
-        int j = 0;
-        var cardNumbersList = lines.Where(line => line.Length == _cardNumber_Length).ToList();
-        foreach (var item in cardNumbersList)
+        int i = 0;
+
+        if (lines.Length == 0) Console.WriteLine("There are no cards to display!");
+        else
         {
-            Console.WriteLine($"Card {j + 1}");
-            Console.WriteLine(item);
-            Console.WriteLine("---");
-            j++;
+            foreach (var line in lines.Where(line => line.Length == _cardNumber_Length))
+            {
+                Console.WriteLine($"Card {i + 1}");
+                Console.WriteLine(line);
+                Console.WriteLine("---");
+                i++;
+            }
         }
     }
     public bool ValidateCardInfo(string cardNumber, string cvv2, string exDate)
@@ -164,5 +167,15 @@ public class Card : ICard
         return (exDate.Split('/')[0].All(x => Char.IsDigit(x))
         && exDate.Split('/')[1].All(x => Char.IsDigit(x))
         && exDate[2] == _expireDate_Separator);
+    }
+    public void PrintEditCardMenu(string[] lines, int i)
+    {
+        Console.WriteLine($"Card number : {lines[i]}");
+        Console.WriteLine($"Cvv2 : {lines[i + 1]}");
+        Console.WriteLine($"Expiration date : {lines[i + 2]}");
+        Console.WriteLine("\nEnter an item to edit:");
+        Console.WriteLine("\t1)Card number");
+        Console.WriteLine("\t2)Cvv2");
+        Console.WriteLine("\t3)Expire date");
     }
 }

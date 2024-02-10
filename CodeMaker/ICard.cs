@@ -8,7 +8,8 @@ interface ICard
     void EditCard();
     void RemoveCard();
     void ShowCardsList();
-    void showCardNumbersList();
+    void ShowCardNumbersList();
     void GetCardInfo();
     bool ValidateCardInfo(string cardNumber, string cvv2, string exDate);
+    void PrintEditCardMenu(string[] lines, int i);
 }
