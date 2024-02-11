@@ -1,24 +1,30 @@
 class Password : IPassword
 {
-    private string _passInfoPath = @"C:\Users\FAHA\Desktop\Pos-Simulator\Code Maker\Password.txt";
-    private string _cardInfoPath = @"C:\Users\FAHA\Desktop\Pos-Simulator\Code Maker\Card.txt";
+    private readonly string _passInfoPath = @"Enter the path of your password file";
+    private readonly string _cardInfoPath = @"Enter the path of your card information file";
     public void CreatePassword()
     {
-        ICard myCard = new Card();
+        ICard card = new Card();
         var lines = MyFile.ReadInfo(_cardInfoPath);
-        myCard.showCardNumbersList();
+        card.ShowCardNumbersList();
 
         Console.WriteLine("Enter a card number to generate a dynamic password:");
         var inputCardNumber = Console.ReadLine();
-        var cardNumber = lines.Where(line => line == inputCardNumber).Select(line => line);
 
-        if (cardNumber.Count() == 1)
+        if (lines.Any(line => line == inputCardNumber))
         {
-            Random random = new Random();
-            var password = random.Next(100000, 1000000).ToString();
+            var password = GeneratePassword();
             MyFile.WriteInfo(_passInfoPath, inputCardNumber, password);
             Console.WriteLine("\nPassword : " + password);
         }
-        else throw new Exception("Input card number does not exist!");
+        else
+        {
+            throw new Exception("Input card number does not exist!");
+        }
+    }
+    public string GeneratePassword()
+    {
+        Random random = new Random();
+        return random.Next(100000, 1000000).ToString();
     }
 }

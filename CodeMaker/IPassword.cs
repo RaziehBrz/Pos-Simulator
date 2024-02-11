@@ -1,4 +1,5 @@
-interface IPassword
+public interface IPassword
 {
     void CreatePassword();
+    string GeneratePassword();
 }
