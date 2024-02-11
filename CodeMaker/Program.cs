@@ -3,7 +3,7 @@ internal class Program
     static void Main(string[] args)
     {
         var exit = false;
-        var myCard = new Card();
+        var card = new Card();
         var myPass = new Password();
 
         do
@@ -18,16 +18,16 @@ internal class Program
                 switch (inputNumber)
                 {
                     case "1":
-                        myCard.AddCard();
+                        card.AddCard();
                         break;
                     case "2":
-                        myCard.EditCard();
+                        card.EditCard();
                         break;
                     case "3":
-                        myCard.RemoveCard();
+                        card.RemoveCard();
                         break;
                     case "4":
-                        myCard.ShowCardsList();
+                        card.ShowCardsList();
                         break;
                     case "5":
                         myPass.CreatePassword();
