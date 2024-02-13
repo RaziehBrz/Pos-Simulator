@@ -1,6 +1,6 @@
 interface Ipos
 {
     void GetData();
-    void Validation();
+    void ValidateInfo();
     void PrintTransactions();
 }

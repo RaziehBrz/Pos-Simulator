@@ -16,7 +16,7 @@
                     case "1":
                         Console.Clear();
                         pos.GetData();
-                        pos.Validation();
+                        pos.ValidateInfo();
                         break;
                     case "2":
                         Console.Clear();

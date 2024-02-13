@@ -2,12 +2,13 @@ class Pos : Ipos
 {
     public string CardNumber { get; set; }
     public string PurchaseAmount { get; set; }
+    private readonly int _cardNumberLength = 16;
     public string _cvv2;
     public string _expirationDate;
     public string _password;
-    public string _cardFilePath = @"C:\\Users\\FAHA\\Desktop\\Pos-Simulator\\Code Maker\\Card.txt";
-    public string _passwordFilePath = @"C:\\Users\\FAHA\\Desktop\\Pos-Simulator\\Code Maker\\Password.txt";
-    public string _transactionFilePath = @"C:\\Users\\FAHA\\Desktop\\Pos-Simulator\\Pos\\Transaction.txt";
+    public string _cardFilePath = @"Enter the path of your card information file";
+    public string _passwordFilePath = @"Enter the path of your password file";
+    public string _transactionFilePath = @"Enter the path of your transaction file";
     public void GetData()
     {
         Console.WriteLine("Enter the purchase amount :");
@@ -25,31 +26,27 @@ class Pos : Ipos
         Console.WriteLine("Enter the dynamic password :");
         _password = Console.ReadLine();
     }
-    public void Validation()
+    public void ValidateInfo()
     {
-
         var passwordData = MyFile.ReadData(_passwordFilePath);
         var cardInfo = MyFile.ReadData(_cardFilePath);
         var transaction = new Transaction();
 
-        for (int i = 0; i < cardInfo.Length; i++)
+        for (int i = 0; i < cardInfo.Length; i += 4)
         {
             if (cardInfo[i] == CardNumber
-             && cardInfo[i + 1] == _cvv2
-             && cardInfo[i + 2] == _expirationDate
-             && passwordData[0] == CardNumber
-             && passwordData[1] == _password)
+                && cardInfo[i + 1] == _cvv2
+                && cardInfo[i + 2] == _expirationDate
+                && passwordData[0] == CardNumber
+                && passwordData[1] == _password)
             {
                 transaction.Status = true;
                 break;
             }
-            else if (i == cardInfo.Length - 1)
-            {
-                transaction.Status = false;
-                Console.WriteLine("You entered wrong item!");
-            }
         }
-        var transactionStatus = transaction.Status == true ? "successfull" : "unsuccessfull";
+        if (!transaction.Status) Console.WriteLine("You entered wrong item!");
+
+        var transactionStatus = transaction.Status ? "successful" : "unsuccessful";
         MyFile.WriteTransactionInfo(CardNumber, PurchaseAmount, transaction.Status);
         Console.WriteLine("Transaction was " + transactionStatus);
     }
@@ -59,7 +56,7 @@ class Pos : Ipos
         int i = 0;
         foreach (var line in transactionData)
         {
-            if (line.Length == 16)
+            if (line.Length == _cardNumberLength)
             {
                 i++;
                 Console.WriteLine("Transaction " + i);
