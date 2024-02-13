@@ -1,6 +1,6 @@
 public class MyFile
 {
-    private static string _transactionFilePath = @"C:\Users\FAHA\Desktop\Pos-Simulator\Pos\Transaction.txt";
+    private static string _transactionFilePath = @"Enter the path of your transaction file";
     public static void WriteTransactionInfo(string cardNumber, string amount, bool status)
     {
         using (var sw = new StreamWriter(_transactionFilePath, true))
