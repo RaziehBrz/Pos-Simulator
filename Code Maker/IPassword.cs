@@ -1,4 +1,0 @@
-interface IPassword
-{
-    void CreatePassword();
-}
